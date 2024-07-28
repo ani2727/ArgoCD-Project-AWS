@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'anil2727/my-docker:v1'
+      image 'anil2727/my-docker'
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
     }
   }
