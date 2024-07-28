@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'abhitrainings888/argocd-project:v1'
+      image 'anil2727/my-docker:v1'
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
     }
   }
@@ -9,7 +9,7 @@ pipeline {
     stage('Checkout') {
       steps {
         sh 'echo passed'
-        //git branch: 'main', url: 'https://github.com/abhitrainings/ARGOCD-PROJECT.git'
+        //git branch: 'main', url: 'https://github.com/ani2727/ArgoCD-Project-AWS.git'
       }
     }
     stage('Build and Test') {
@@ -31,7 +31,7 @@ pipeline {
     }
     stage('Build and Push Docker Image') {
       environment {
-        DOCKER_IMAGE = "abhitrainings888/argocd-project-builds:${BUILD_NUMBER}"
+        DOCKER_IMAGE = "anil2727/my-docker-builds:${BUILD_NUMBER}"
         // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
         REGISTRY_CREDENTIALS = credentials('docker-cred')
       }
@@ -47,14 +47,14 @@ pipeline {
     }
     stage('Update Deployment File') {
         environment {
-            GIT_REPO_NAME = "ARGOCD-PROJECT"
-            GIT_USER_NAME = "abhitrainings"
+            GIT_REPO_NAME = "ArgoCD-Project-AWS"
+            GIT_USER_NAME = "ani2727"
         }
         steps {
             withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                 sh '''
-                    git config user.email "abhitrainings888@gmail.com"
-                    git config user.name "abhitrainings"
+                    git config user.email "katrothanil123@gmail.com"
+                    git config user.name "ani2727"
                     BUILD_NUMBER=${BUILD_NUMBER}
                     sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
                     git add java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
